@@ -32,7 +32,7 @@
 //登录
 - (IBAction)loginAction {
     [Common showProgressView:@"登录中..." view:self.view modal:NO];
-    [ServerProvider loginToRestServer:@"sunyan" andPwd:@"111111" result:^(ServerReturnInfo *retInfo) {
+    [ServerProvider loginToRestServer:@"xuetao" andPwd:@"123456" result:^(ServerReturnInfo *retInfo) {
         [Common hideProgressView:self.view];
         if (retInfo.bSuccess)
         {

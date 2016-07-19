@@ -7,13 +7,13 @@
 //
 
 #import "VNetworkFramework.h"
-#import <Foundation/Foundation.h>
-#import "ServerProvider.h"
-#import "Common.h"
-#import "ServerReturnInfo.h"
 
 //Chat Session ID
 static NSString *strChatSessionID = @"";
+
+//暂存登录参数和URL，用于Session超时，然后重新登录使用
+static id loginParameter = nil;
+static NSString *loginURL = nil;
 
 @interface VNetworkFramework ()
 {
@@ -48,11 +48,12 @@ static NSString *strChatSessionID = @"";
         if (nResponseStatusCode == 302 && nRecursiveNum<=3)
         {
             //遇到302，重新请求
-            [ServerProvider loginToRestServer:[Common getUserAccount] andPwd:[Common getUserPwd] result:^(ServerReturnInfo *retInfo) {
-                if (retInfo.bSuccess)
+            VNetworkFramework *loginNetworkFramework = [[VNetworkFramework alloc]initWithURLString:loginURL];
+            [loginNetworkFramework loginToRestServer:loginParameter result:^(id responseObject, NSError *error) {
+                if (error == nil)
                 {
                     [self startRequestToServer:strRequestMethod parameter:objParameter result:networkResult];
-                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:VNETWORK_NOTIFY_LOGINAGAIN object:responseObject];
                 }
             }];
         }
@@ -74,10 +75,12 @@ static NSString *strChatSessionID = @"";
         if (nResponseStatusCode == 302 && nRecursiveNum<=3)
         {
             //遇到302，重新请求
-            [ServerProvider loginToRestServer:[Common getUserAccount] andPwd:[Common getUserPwd] result:^(ServerReturnInfo *retInfo) {
-                if (retInfo.bSuccess)
+            VNetworkFramework *loginNetworkFramework = [[VNetworkFramework alloc]initWithURLString:loginURL];
+            [loginNetworkFramework loginToRestServer:loginParameter result:^(id responseObject, NSError *error) {
+                if (error == nil)
                 {
-                    [self startRequestToChatServer:strRequestMethod parameter:objParameter result:networkResult];
+                    [self startRequestToServer:strRequestMethod parameter:objParameter result:networkResult];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:VNETWORK_NOTIFY_LOGINAGAIN object:responseObject];
                 }
             }];
         }
@@ -229,6 +232,10 @@ static NSString *strChatSessionID = @"";
     [self sendPostToServerCommonMethod:@"POST" parameter:objParameter sessionId:nil result:^(id responseObject,NSError *error){
         if (error == nil)
         {
+            //暂存登录参数和URL，用于Session超时，然后重新登录使用
+            loginParameter = objParameter;
+            loginURL = strConnectionURL;
+            
             //save 聊天node session ID(获取全局Cookie)
             NSArray *aryCookie = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
             for (int i=0; i<aryCookie.count; i++)

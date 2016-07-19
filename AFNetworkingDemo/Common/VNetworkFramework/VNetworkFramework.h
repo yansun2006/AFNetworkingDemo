@@ -17,6 +17,8 @@
 #define ERROR_TO_DATA           @"数据异常,请稍后再试"
 #define ERROR_TO_UPLOAD_FILE    @"文件上传失败,请稍后再试"
 
+#define VNETWORK_NOTIFY_LOGINAGAIN    @"VNETWORK_NOTIFY_LOGINAGAIN"     //重新登录的通知
+
 typedef void (^NetworkResult)(id responseObject,NSError *error);
 
 typedef void (^FileUploadResult)(NSArray *aryResult,NSError *error);

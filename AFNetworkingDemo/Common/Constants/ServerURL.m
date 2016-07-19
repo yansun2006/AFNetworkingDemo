@@ -14,9 +14,9 @@
 //static NSString *g_chatPrefixURL	= @"http://vn-functional.chinacloudapp.cn:3001/";               //Node 聊天服务器
 //static NSString *g_nginxPrefixURL	= @"http://vn-functional.chinacloudapp.cn/sloth-app/";          //Ngnix 服务器
 
-static NSString *g_restPrefixURL    = @"http://vn-functional.chinacloudapp.cn/wsk-ns/api/";        //Restful API 服务器
-static NSString *g_chatPrefixURL	= @"http://vn-functional.chinacloudapp.cn:3001/";               //Node 聊天服务器
-static NSString *g_nginxPrefixURL	= @"http://vn-functional.chinacloudapp.cn/sloth-app/";          //Ngnix 服务器
+static NSString *g_restPrefixURL    = @"http://vn-functional.chinacloudapp.cn/findest/";        //Restful API 服务器
+static NSString *g_chatPrefixURL	= @"http://vn-functional.chinacloudapp.cn:10005/";               //Node 聊天服务器
+static NSString *g_nginxPrefixURL	= @"http://vn-functional.chinacloudapp.cn/findest-app/";          //Ngnix 服务器
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////

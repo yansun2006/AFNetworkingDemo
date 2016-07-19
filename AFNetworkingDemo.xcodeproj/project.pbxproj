@@ -18,7 +18,6 @@
 		D00473551CFE98EE0021EE2E /* NotifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = D00473541CFE98EE0021EE2E /* NotifyService.m */; };
 		D004735A1CFE99190021EE2E /* NotifyTypeVo.m in Sources */ = {isa = PBXBuildFile; fileRef = D00473571CFE99190021EE2E /* NotifyTypeVo.m */; };
 		D004735B1CFE99190021EE2E /* NotifyVo.m in Sources */ = {isa = PBXBuildFile; fileRef = D00473591CFE99190021EE2E /* NotifyVo.m */; };
-		D004735E1CFE995D0021EE2E /* UploadFileVo.m in Sources */ = {isa = PBXBuildFile; fileRef = D004735D1CFE995D0021EE2E /* UploadFileVo.m */; };
 		D00473641CFE99A90021EE2E /* ServerProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = D00473611CFE99A90021EE2E /* ServerProvider.m */; };
 		D00473651CFE99A90021EE2E /* ServerReturnInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D00473631CFE99A90021EE2E /* ServerReturnInfo.m */; };
 		D00473721CFE9A520021EE2E /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = D004736A1CFE9A520021EE2E /* Common.m */; };
@@ -53,6 +52,7 @@
 		D01614B51D00208C00B2EE06 /* CommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D01614B41D00208C00B2EE06 /* CommonViewController.m */; };
 		D01614C81D0020C800B2EE06 /* SNUIBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D01614C31D0020C800B2EE06 /* SNUIBarButtonItem.m */; };
 		D01614CF1D0020DA00B2EE06 /* UIColor+SNFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = D01614CE1D0020DA00B2EE06 /* UIColor+SNFoundation.m */; };
+		D037392C1D3DD0180032F173 /* UploadFileVo.m in Sources */ = {isa = PBXBuildFile; fileRef = D037392B1D3DD0180032F173 /* UploadFileVo.m */; };
 		D0C10C441D1A48A6002828A7 /* TestSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C10C431D1A48A6002828A7 /* TestSwiftViewController.swift */; };
 		D0C10C461D1A7B08002828A7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C10C451D1A7B08002828A7 /* Constants.swift */; };
 /* End PBXBuildFile section */
@@ -79,8 +79,6 @@
 		D00473571CFE99190021EE2E /* NotifyTypeVo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifyTypeVo.m; sourceTree = "<group>"; };
 		D00473581CFE99190021EE2E /* NotifyVo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifyVo.h; sourceTree = "<group>"; };
 		D00473591CFE99190021EE2E /* NotifyVo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifyVo.m; sourceTree = "<group>"; };
-		D004735C1CFE995D0021EE2E /* UploadFileVo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadFileVo.h; sourceTree = "<group>"; };
-		D004735D1CFE995D0021EE2E /* UploadFileVo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadFileVo.m; sourceTree = "<group>"; };
 		D00473601CFE99A90021EE2E /* ServerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerProvider.h; sourceTree = "<group>"; };
 		D00473611CFE99A90021EE2E /* ServerProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerProvider.m; sourceTree = "<group>"; };
 		D00473621CFE99A90021EE2E /* ServerReturnInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerReturnInfo.h; sourceTree = "<group>"; };
@@ -128,6 +126,8 @@
 		D01614C31D0020C800B2EE06 /* SNUIBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNUIBarButtonItem.m; sourceTree = "<group>"; };
 		D01614CD1D0020DA00B2EE06 /* UIColor+SNFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SNFoundation.h"; sourceTree = "<group>"; };
 		D01614CE1D0020DA00B2EE06 /* UIColor+SNFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+SNFoundation.m"; sourceTree = "<group>"; };
+		D037392A1D3DD0180032F173 /* UploadFileVo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadFileVo.h; sourceTree = "<group>"; };
+		D037392B1D3DD0180032F173 /* UploadFileVo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadFileVo.m; sourceTree = "<group>"; };
 		D0C10C421D1A48A5002828A7 /* AFNetworkingDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AFNetworkingDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		D0C10C431D1A48A6002828A7 /* TestSwiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftViewController.swift; sourceTree = "<group>"; };
 		D0C10C451D1A7B08002828A7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -227,6 +227,8 @@
 		D00473351CFE979A0021EE2E /* VNetworkFramework */ = {
 			isa = PBXGroup;
 			children = (
+				D037392A1D3DD0180032F173 /* UploadFileVo.h */,
+				D037392B1D3DD0180032F173 /* UploadFileVo.m */,
 				D00473361CFE979A0021EE2E /* VNetworkFramework.h */,
 				D00473371CFE979A0021EE2E /* VNetworkFramework.m */,
 			);
@@ -257,8 +259,6 @@
 		D00473521CFE98EE0021EE2E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				D004735C1CFE995D0021EE2E /* UploadFileVo.h */,
-				D004735D1CFE995D0021EE2E /* UploadFileVo.m */,
 				D00473561CFE99190021EE2E /* NotifyTypeVo.h */,
 				D00473571CFE99190021EE2E /* NotifyTypeVo.m */,
 				D00473581CFE99190021EE2E /* NotifyVo.h */,
@@ -546,13 +546,13 @@
 				D00473721CFE9A520021EE2E /* Common.m in Sources */,
 				D0C10C441D1A48A6002828A7 /* TestSwiftViewController.swift in Sources */,
 				D01614771D00109600B2EE06 /* FileVo.m in Sources */,
+				D037392C1D3DD0180032F173 /* UploadFileVo.m in Sources */,
 				D01614B51D00208C00B2EE06 /* CommonViewController.m in Sources */,
 				D01614CF1D0020DA00B2EE06 /* UIColor+SNFoundation.m in Sources */,
 				D00473641CFE99A90021EE2E /* ServerProvider.m in Sources */,
 				D00473741CFE9A520021EE2E /* ServerURL.m in Sources */,
 				D00473331CFE97950021EE2E /* AppDelegate.m in Sources */,
 				D01614741D00101F00B2EE06 /* SYHTTPRequestOperation.m in Sources */,
-				D004735E1CFE995D0021EE2E /* UploadFileVo.m in Sources */,
 				D00473551CFE98EE0021EE2E /* NotifyService.m in Sources */,
 				D004733D1CFE97A40021EE2E /* ViewController.m in Sources */,
 				D01614721D00101F00B2EE06 /* FileBrowserViewController.m in Sources */,
