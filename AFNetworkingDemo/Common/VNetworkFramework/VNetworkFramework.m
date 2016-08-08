@@ -33,6 +33,7 @@ static NSString *loginURL = nil;
     {
         nRecursiveNum = 0;
         strConnectionURL = strURL;
+        self.responseEncoding = NSUTF8StringEncoding;
     }
     
     return self;
@@ -443,18 +444,20 @@ static NSString *loginURL = nil;
         if (!jsonObject)
         {
             //当解析失败去掉可能的非法字符
-            NSString *strJSON = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            NSString *strJSON = [[NSString alloc]initWithData:data encoding:self.responseEncoding];
 #ifdef DEBUG
             NSLog(@"-JSONValue failed. Error trace is: %@,\n JSON:%@", error,strJSON);
 #endif
             
-            NSString *string = [strJSON stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-            string = [string stringByReplacingOccurrencesOfString:@"\t" withString:@"    "];
-            string = [string stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
-            string = [string stringByReplacingOccurrencesOfString:@"" withString:@"_"];
-            data = [string dataUsingEncoding:NSUTF8StringEncoding];
+            NSMutableString *string = [[NSMutableString alloc]initWithString:strJSON];
+            [string replaceOccurrencesOfString:@"\r" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, string.length)];
+            [string replaceOccurrencesOfString:@"\n" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, string.length)];
+            [string replaceOccurrencesOfString:@"\t" withString:@"    " options:NSCaseInsensitiveSearch range:NSMakeRange(0, string.length)];
             
-            jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            data = [string dataUsingEncoding:NSUTF8StringEncoding];
+            if (data) {
+                jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            }
         }
     }
     

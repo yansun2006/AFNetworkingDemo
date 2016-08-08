@@ -38,6 +38,8 @@ typedef enum {
 
 @interface VNetworkFramework : NSObject
 
+@property (nonatomic)NSStringEncoding responseEncoding;
+
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 @property (nonatomic, strong) dispatch_group_t completionGroup;
 
