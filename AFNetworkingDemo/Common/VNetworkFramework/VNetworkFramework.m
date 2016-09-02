@@ -80,7 +80,7 @@ static NSString *loginURL = nil;
             [loginNetworkFramework loginToRestServer:loginParameter result:^(id responseObject, NSError *error) {
                 if (error == nil)
                 {
-                    [self startRequestToServer:strRequestMethod parameter:objParameter result:networkResult];
+                    [self startRequestToChatServer:strRequestMethod parameter:objParameter result:networkResult];
                     [[NSNotificationCenter defaultCenter] postNotificationName:VNETWORK_NOTIFY_LOGINAGAIN object:responseObject];
                 }
             }];

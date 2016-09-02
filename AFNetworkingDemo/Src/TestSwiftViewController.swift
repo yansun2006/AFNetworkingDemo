@@ -49,9 +49,6 @@ struct Struct1 {
         logSwift("call str1 property")
         return "123"
     }()
-    
-    
-    
 }
 
 
@@ -92,15 +89,35 @@ class TestSwiftViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func loginAction(sender: AnyObject) {
+        Common.showProgressView("登录中...", view: self.view, modal: false)
+        TestNetworkService.loginAction("sunyan", password: "123456") { (isSuccess, strErrorMessage, version) in
+            Common.hideProgressView(self.view)
+            if isSuccess {
+                if let version = version {
+                    print("version: " + version)
+                }
+            } else {
+                Common.tipAlert(strErrorMessage ?? "")
+            }
+        }
     }
-    */
+    
+    @IBAction func getUserDetail(sender: AnyObject) {
+        TestNetworkService.getUserDetail("23")
+    }
+    
+    @IBAction func logoutAction(sender: AnyObject) {
+        TestNetworkService.logoutAction()
+    }
+    
+    @IBAction func uploadAction(sender: AnyObject) {
+        var aryFile = [String]()
+        aryFile.append(NSBundle.mainBundle().pathForResource("apk_preview", ofType:"png") ?? "")
+        aryFile.append(NSBundle.mainBundle().pathForResource("app_preview", ofType:"png") ?? "")
+        aryFile.append(NSBundle.mainBundle().pathForResource("caf_preview", ofType:"png") ?? "")
+        
+        TestNetworkService.uploadAction(aryFile)
+    }
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m1g-Io-Muw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m1g-Io-Muw">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -67,7 +67,47 @@
                     <view key="view" contentMode="scaleToFill" id="ZX1-nK-atu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nR2-8C-fzN">
+                                <rect key="frame" x="145" y="144" width="30" height="30"/>
+                                <state key="normal" title="登录"/>
+                                <connections>
+                                    <action selector="loginAction:" destination="W9g-0a-FNT" eventType="touchUpInside" id="4Ba-5m-PH0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KgB-HU-TTS">
+                                <rect key="frame" x="130" y="189" width="60" height="30"/>
+                                <state key="normal" title="用户详情"/>
+                                <connections>
+                                    <action selector="getUserDetail:" destination="W9g-0a-FNT" eventType="touchUpInside" id="2tg-Pv-cII"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EMZ-My-31Q">
+                                <rect key="frame" x="145" y="234" width="30" height="30"/>
+                                <state key="normal" title="退出"/>
+                                <connections>
+                                    <action selector="logoutAction:" destination="W9g-0a-FNT" eventType="touchUpInside" id="Bmg-OZ-aVJ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dyu-8h-IHH">
+                                <rect key="frame" x="145" y="279" width="30" height="30"/>
+                                <state key="normal" title="上传"/>
+                                <connections>
+                                    <action selector="uploadAction:" destination="W9g-0a-FNT" eventType="touchUpInside" id="3I4-2G-E2B"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="nR2-8C-fzN" firstAttribute="top" secondItem="bCd-rZ-IGg" secondAttribute="bottom" constant="80" id="3Cg-6C-dbh"/>
+                            <constraint firstItem="KgB-HU-TTS" firstAttribute="top" secondItem="nR2-8C-fzN" secondAttribute="bottom" constant="15" id="CDF-nl-r0Z"/>
+                            <constraint firstItem="dyu-8h-IHH" firstAttribute="top" secondItem="EMZ-My-31Q" secondAttribute="bottom" constant="15" id="N3C-PJ-ORd"/>
+                            <constraint firstItem="KgB-HU-TTS" firstAttribute="centerX" secondItem="ZX1-nK-atu" secondAttribute="centerX" id="YWa-hY-0Pc"/>
+                            <constraint firstItem="dyu-8h-IHH" firstAttribute="centerX" secondItem="ZX1-nK-atu" secondAttribute="centerX" id="g6W-ia-UPP"/>
+                            <constraint firstItem="EMZ-My-31Q" firstAttribute="top" secondItem="KgB-HU-TTS" secondAttribute="bottom" constant="15" id="gTH-fa-nqk"/>
+                            <constraint firstItem="EMZ-My-31Q" firstAttribute="centerX" secondItem="ZX1-nK-atu" secondAttribute="centerX" id="qWx-Sa-i0T"/>
+                            <constraint firstItem="nR2-8C-fzN" firstAttribute="centerX" secondItem="ZX1-nK-atu" secondAttribute="centerX" id="zWk-oT-Ma8"/>
+                        </constraints>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

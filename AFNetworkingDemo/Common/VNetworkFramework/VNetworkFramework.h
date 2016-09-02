@@ -23,8 +23,6 @@ typedef void (^NetworkResult)(id responseObject,NSError *error);
 
 typedef void (^FileUploadResult)(NSArray *aryResult,NSError *error);
 
-typedef void (^SingleFileUploadResult)(UploadFileVo *uploadFileVo,NSError *error);
-
 //错误域对象
 #define VNetworkErrorDomain @"com.visionet.VNetworkFramework"
 

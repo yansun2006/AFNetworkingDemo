@@ -55,6 +55,8 @@
 		D037392C1D3DD0180032F173 /* UploadFileVo.m in Sources */ = {isa = PBXBuildFile; fileRef = D037392B1D3DD0180032F173 /* UploadFileVo.m */; };
 		D0C10C441D1A48A6002828A7 /* TestSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C10C431D1A48A6002828A7 /* TestSwiftViewController.swift */; };
 		D0C10C461D1A7B08002828A7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C10C451D1A7B08002828A7 /* Constants.swift */; };
+		D0E24A1C1D76AF2E001079E8 /* VisionetNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E24A1B1D76AF2E001079E8 /* VisionetNetwork.swift */; };
+		D0E24A1E1D76AF9B001079E8 /* TestNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E24A1D1D76AF9B001079E8 /* TestNetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -131,6 +133,8 @@
 		D0C10C421D1A48A5002828A7 /* AFNetworkingDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AFNetworkingDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		D0C10C431D1A48A6002828A7 /* TestSwiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftViewController.swift; sourceTree = "<group>"; };
 		D0C10C451D1A7B08002828A7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D0E24A1B1D76AF2E001079E8 /* VisionetNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionetNetwork.swift; sourceTree = "<group>"; };
+		D0E24A1D1D76AF9B001079E8 /* TestNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestNetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +235,7 @@
 				D037392B1D3DD0180032F173 /* UploadFileVo.m */,
 				D00473361CFE979A0021EE2E /* VNetworkFramework.h */,
 				D00473371CFE979A0021EE2E /* VNetworkFramework.m */,
+				D0E24A1B1D76AF2E001079E8 /* VisionetNetwork.swift */,
 			);
 			path = VNetworkFramework;
 			sourceTree = "<group>";
@@ -276,6 +281,7 @@
 				D00473611CFE99A90021EE2E /* ServerProvider.m */,
 				D00473621CFE99A90021EE2E /* ServerReturnInfo.h */,
 				D00473631CFE99A90021EE2E /* ServerReturnInfo.m */,
+				D0E24A1D1D76AF9B001079E8 /* TestNetworkService.swift */,
 			);
 			path = GlobalService;
 			sourceTree = "<group>";
@@ -495,7 +501,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		B8B2E315EDA87D12D81B7CEE /* [CP] Copy Pods Resources */ = {
@@ -546,7 +552,9 @@
 				D00473721CFE9A520021EE2E /* Common.m in Sources */,
 				D0C10C441D1A48A6002828A7 /* TestSwiftViewController.swift in Sources */,
 				D01614771D00109600B2EE06 /* FileVo.m in Sources */,
+				D0E24A1C1D76AF2E001079E8 /* VisionetNetwork.swift in Sources */,
 				D037392C1D3DD0180032F173 /* UploadFileVo.m in Sources */,
+				D0E24A1E1D76AF9B001079E8 /* TestNetworkService.swift in Sources */,
 				D01614B51D00208C00B2EE06 /* CommonViewController.m in Sources */,
 				D01614CF1D0020DA00B2EE06 /* UIColor+SNFoundation.m in Sources */,
 				D00473641CFE99A90021EE2E /* ServerProvider.m in Sources */,
