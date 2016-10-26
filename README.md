@@ -1,0 +1,2 @@
+# AFNetworkingDemo
+基于AFNetworking的网络访问封装，以及断点下载功能
