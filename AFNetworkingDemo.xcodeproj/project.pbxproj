@@ -53,6 +53,7 @@
 		D01614C81D0020C800B2EE06 /* SNUIBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D01614C31D0020C800B2EE06 /* SNUIBarButtonItem.m */; };
 		D01614CF1D0020DA00B2EE06 /* UIColor+SNFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = D01614CE1D0020DA00B2EE06 /* UIColor+SNFoundation.m */; };
 		D037392C1D3DD0180032F173 /* UploadFileVo.m in Sources */ = {isa = PBXBuildFile; fileRef = D037392B1D3DD0180032F173 /* UploadFileVo.m */; };
+		D0B48D811D7D095600B57938 /* UserVo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B48D801D7D095600B57938 /* UserVo.swift */; };
 		D0C10C441D1A48A6002828A7 /* TestSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C10C431D1A48A6002828A7 /* TestSwiftViewController.swift */; };
 		D0C10C461D1A7B08002828A7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C10C451D1A7B08002828A7 /* Constants.swift */; };
 		D0E24A1C1D76AF2E001079E8 /* VisionetNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E24A1B1D76AF2E001079E8 /* VisionetNetwork.swift */; };
@@ -130,6 +131,7 @@
 		D01614CE1D0020DA00B2EE06 /* UIColor+SNFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+SNFoundation.m"; sourceTree = "<group>"; };
 		D037392A1D3DD0180032F173 /* UploadFileVo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadFileVo.h; sourceTree = "<group>"; };
 		D037392B1D3DD0180032F173 /* UploadFileVo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadFileVo.m; sourceTree = "<group>"; };
+		D0B48D801D7D095600B57938 /* UserVo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserVo.swift; sourceTree = "<group>"; };
 		D0C10C421D1A48A5002828A7 /* AFNetworkingDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AFNetworkingDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		D0C10C431D1A48A6002828A7 /* TestSwiftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftViewController.swift; sourceTree = "<group>"; };
 		D0C10C451D1A7B08002828A7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 				D00473591CFE99190021EE2E /* NotifyVo.m */,
 				D00473531CFE98EE0021EE2E /* NotifyService.h */,
 				D00473541CFE98EE0021EE2E /* NotifyService.m */,
+				D0B48D801D7D095600B57938 /* UserVo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				D01614731D00101F00B2EE06 /* SYDownloadManager.m in Sources */,
 				D01614C81D0020C800B2EE06 /* SNUIBarButtonItem.m in Sources */,
 				D00473651CFE99A90021EE2E /* ServerReturnInfo.m in Sources */,
+				D0B48D811D7D095600B57938 /* UserVo.swift in Sources */,
 				D004735A1CFE99190021EE2E /* NotifyTypeVo.m in Sources */,
 				D01614851D00129400B2EE06 /* Utils.m in Sources */,
 				D004735B1CFE99190021EE2E /* NotifyVo.m in Sources */,

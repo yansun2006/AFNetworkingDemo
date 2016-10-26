@@ -9,6 +9,16 @@
 import Foundation
 import Alamofire
 
+//相关常量定义
+private let VNetworkErrorDomain = "com.visionet.VisionetNetwork"       //错误域对象
+private let ERROR_TO_SERVER_AF = "访问服务器出错,请稍后再试"
+private let ERROR_TO_NETWORK_AF = "网络错误,请稍后再试"
+private let ERROR_TO_REQUEST_DATA = "请求数据异常"
+private let ERROR_TO_RESPONSE_DATA = "响应数据异常"
+private let ERROR_TO_UPLOAD_FILE = "文件上传失败,请稍后再试"
+private let VNETWORK_NOTIFY_LOGINAGAIN = "VNETWORK_NOTIFY_LOGINAGAIN"    //重新登录的通知
+private let HTTP_STATUS_OK = 200
+
 enum VNetworkCode :Int {
     case RequestError = -1000       //网络请求错误
     case ResponseNilError           //响应内容为空
@@ -21,6 +31,20 @@ enum VNetworkCode :Int {
 
 enum VNetworkMethod: String {
     case GET, POST
+}
+
+typealias FailureBlock = (VNetworkError) -> Void
+
+struct VNetworkError: ErrorType {
+    let _domain: String
+    let _code: Int
+    let errorMessage: String
+    
+    init(domain: String = VNetworkErrorDomain, code: VNetworkCode = .UnknowError, description: String) {
+        _domain = domain
+        _code = code.rawValue
+        errorMessage = description
+    }
 }
 
 class VisionetNetwork: NSObject {
@@ -36,22 +60,12 @@ class VisionetNetwork: NSObject {
     var nRecursiveNum = 0           //控制递归次数，不超过3次
     var nResponseStatusCode = 200   //响应状态
     
-    //相关常量定义
-    static let VNetworkErrorDomain = "com.visionet.VisionetNetwork"       //错误域对象
-    static let ERROR_TO_SERVER_AF = "访问服务器出错,请稍后再试"
-    static let ERROR_TO_NETWORK_AF = "网络错误,请稍后再试"
-    static let ERROR_TO_REQUEST_DATA = "请求数据异常"
-    static let ERROR_TO_RESPONSE_DATA = "响应数据异常"
-    static let ERROR_TO_UPLOAD_FILE = "文件上传失败,请稍后再试"
-    static let VNETWORK_NOTIFY_LOGINAGAIN = "VNETWORK_NOTIFY_LOGINAGAIN"    //重新登录的通知
-    static let HTTP_STATUS_OK = 200
-    
     init(strURL: String) {
         strConnectionURL = strURL.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
     }
     
     //登录主业务后台服务器
-    func login(parameters: [String: AnyObject], completionHandler: (AnyObject?, NSError?) -> Void) {
+    func login(parameters: [String: AnyObject], completionHandler: (AnyObject, VNetworkError?) -> Void) {
         //清理Cookie，防止抽奖webView的session同步（切换服务器地址）
         clearCookies()
         
@@ -78,19 +92,18 @@ class VisionetNetwork: NSObject {
     }
     
     //请求主业务后台服务器
-    func request(method: VNetworkMethod, parameters: [String: AnyObject]? = nil, completionHandler: (AnyObject?, NSError?) -> Void) {
+    func request(method: VNetworkMethod, parameters: [String: AnyObject]? = nil, completionHandler: (AnyObject, VNetworkError?) -> Void) {
         nRecursiveNum += 1 //控制递归次数(每次请求会初始化为0，当遇到302【Session 超时】，最多三次请求机会)
         requestAction(method, parameters: parameters, sessionId: nil) { (data, error) in
             if self.nResponseStatusCode == 302 && self.nRecursiveNum <= 3 && !VisionetNetwork.loginURL.isEmpty {
-                //遇到302，重新请求
+                //遇到302，重新登录获取新session，然后再请求该接口
                 let network = VisionetNetwork(strURL: VisionetNetwork.loginURL)
-                network.login(VisionetNetwork.loginParameter, completionHandler: { (data, error) in
+                network.login(VisionetNetwork.loginParameter) { (data, error) in
                     if error == nil {
                         self.request(method, parameters: parameters, completionHandler: completionHandler)
-                        NSNotificationCenter.defaultCenter().postNotificationName(VisionetNetwork.VNETWORK_NOTIFY_LOGINAGAIN, object: data)
+                        NSNotificationCenter.defaultCenter().postNotificationName(VNETWORK_NOTIFY_LOGINAGAIN, object: data)
                     }
-                })
-                
+                }
             } else {
                 completionHandler(data, error)
             }
@@ -98,18 +111,18 @@ class VisionetNetwork: NSObject {
     }
     
     //请求聊天服务器
-    func requestChat(method: VNetworkMethod, parameters: [String: AnyObject]? = nil, completionHandler: (AnyObject?, NSError?) -> Void) {
+    func requestChat(method: VNetworkMethod, parameters: [String: AnyObject]? = nil, completionHandler: (AnyObject, VNetworkError?) -> Void) {
         nRecursiveNum += 1 //控制递归次数
         requestAction(method, parameters: parameters, sessionId: nil) { (data, error) in
             if self.nResponseStatusCode == 302 && self.nRecursiveNum <= 3  && !VisionetNetwork.loginURL.isEmpty {
-                //遇到302，重新请求
+                //遇到302，重新登录获取新session，然后再请求该接口
                 let network = VisionetNetwork(strURL: VisionetNetwork.loginURL)
-                network.login(VisionetNetwork.loginParameter, completionHandler: { (data, error) in
+                network.login(VisionetNetwork.loginParameter) { (data, error) in
                     if error == nil {
                         self.requestChat(method, parameters: parameters, completionHandler: completionHandler)
-                        NSNotificationCenter.defaultCenter().postNotificationName(VisionetNetwork.VNETWORK_NOTIFY_LOGINAGAIN, object: data)
+                        NSNotificationCenter.defaultCenter().postNotificationName(VNETWORK_NOTIFY_LOGINAGAIN, object: data)
                     }
-                })
+                }
                 
             } else {
                 completionHandler(data, error)
@@ -118,7 +131,7 @@ class VisionetNetwork: NSObject {
     }
     
     //上传文件,通过文件路径方式（表单方式批量上传文件）
-    func uploadFileList(aryFilePath: [String], completionHandler: ([AnyObject]?, NSError?) -> Void) {
+    func uploadFileList(aryFilePath: [String], completionHandler: ([AnyObject], VNetworkError?) -> Void) {
         //打印URL
         #if DEBUG
             print("--Upload Log-------------------------------------------------------------")
@@ -135,9 +148,10 @@ class VisionetNetwork: NSObject {
                     #endif
                 }
             },encodingCompletion: { encodingResult in
-                var resultData: [AnyObject]?
-                var errorNetwork: NSError?
+                var resultData: [AnyObject] = [[:]]
+                var errorNetwork: VNetworkError?
                 
+                //编码结果回调，不是请求结果
                 switch encodingResult {
                 case .Success(let upload, _, _):
                     upload.responseData { response in
@@ -154,13 +168,13 @@ class VisionetNetwork: NSObject {
                         //处理结果
                         self.nResponseStatusCode = response.response?.statusCode ?? 202
                         if let responseData = self.getJsonObjectFormData(response.data) {
-                            //错误处理
-                            if self.nResponseStatusCode != VisionetNetwork.HTTP_STATUS_OK {
-                                var strErrorMsg = VisionetNetwork.ERROR_TO_SERVER_AF
+                            if self.nResponseStatusCode != HTTP_STATUS_OK {
+                                //错误处理
+                                var strErrorMsg = ERROR_TO_SERVER_AF
                                 if let dicResponse = responseData as? [String: AnyObject] {
-                                    strErrorMsg = (dicResponse["msg"] as? String) ?? VisionetNetwork.ERROR_TO_SERVER_AF
+                                    strErrorMsg = (dicResponse["msg"] as? String) ?? ERROR_TO_SERVER_AF
                                 }
-                                errorNetwork = NSError(domain: VisionetNetwork.VNetworkErrorDomain, code: VNetworkCode.HttpStatusError.rawValue, userInfo: [NSLocalizedDescriptionKey : strErrorMsg])
+                                errorNetwork = VNetworkError(code: .HttpStatusError, description: strErrorMsg)
                             } else {
                                 //将数据转换成数组
                                 switch responseData {
@@ -169,34 +183,44 @@ class VisionetNetwork: NSObject {
                                 case let dictionary as [String : AnyObject]:
                                     resultData = [dictionary]
                                 default:
-                                    errorNetwork = NSError(domain: VisionetNetwork.VNetworkErrorDomain, code: VNetworkCode.ResponseDataError.rawValue, userInfo: [NSLocalizedDescriptionKey : VisionetNetwork.ERROR_TO_RESPONSE_DATA])
+                                    errorNetwork = VNetworkError(code: .ResponseDataError, description: ERROR_TO_RESPONSE_DATA)
                                 }
                             }
                         } else {
-                            errorNetwork = NSError(domain: VisionetNetwork.VNetworkErrorDomain, code: VNetworkCode.ResponseNilError.rawValue, userInfo: [NSLocalizedDescriptionKey : VisionetNetwork.ERROR_TO_SERVER_AF])
+                            errorNetwork = VNetworkError(code: .ResponseNilError, description: ERROR_TO_SERVER_AF)
                         }
+                        completionHandler(resultData, errorNetwork)
                     }
                 case .Failure(let encodingError):
-                    errorNetwork = NSError(domain: VisionetNetwork.VNetworkErrorDomain, code: VNetworkCode.RequestDataError.rawValue, userInfo: [NSLocalizedDescriptionKey : VisionetNetwork.ERROR_TO_REQUEST_DATA])
                     #if DEBUG
                         print("Upload Result = \(encodingError)")
                     #endif
+                    
+                    errorNetwork = VNetworkError(code: .RequestDataError, description: ERROR_TO_REQUEST_DATA)
+                    completionHandler(resultData, errorNetwork)
                 }
-                
-                completionHandler(resultData, errorNetwork)
         })
+        
+        //禁用重定向操作（处理发生Session过期）
+        let sessionDelegate = Alamofire.Manager.sharedInstance.delegate
+        sessionDelegate.taskWillPerformHTTPRedirection = { session, task, response, request in
+            if response.statusCode == 302 {
+                return nil
+            } else {
+                return request
+            }
+        }
     }
     
     //////////////////////////////////////////////////////////////////////////////
     //通用的内部方法
-    private func requestAction(method: VNetworkMethod, parameters: [String: AnyObject]? = nil, sessionId: String?, completionHandler: (AnyObject?, NSError?) -> Void) {
+    private func requestAction(method: VNetworkMethod, parameters: [String: AnyObject]? = nil, sessionId: String?, completionHandler: (AnyObject, VNetworkError?) -> Void) {
         //1.init server url、追加SessionID(不对SessionID进行URL编码)
         let serverURL = strConnectionURL + (sessionId ?? "")
         
         //2.start request
         let methodAlamofire = (method == .GET) ? Method.GET : Method.POST
-        Alamofire.request(methodAlamofire, serverURL, parameters: parameters, encoding: .JSON)
-            .responseData { response in
+        Alamofire.request(methodAlamofire, serverURL, parameters: parameters, encoding: .JSON).responseData { response in
                 //打印日志
                 #if DEBUG
                     //打印URL
@@ -222,26 +246,25 @@ class VisionetNetwork: NSObject {
                 
                 //处理结果
                 self.nResponseStatusCode = response.response?.statusCode ?? 202
-                var resultData: AnyObject?
-                var errorNetwork: NSError?
+                var resultData: AnyObject = [:]
+                var errorNetwork: VNetworkError?
                 if let responseData = self.getJsonObjectFormData(response.data) {
                     resultData = responseData
-                    //错误处理
-                    if self.nResponseStatusCode != VisionetNetwork.HTTP_STATUS_OK {
-                        var strErrorMsg = VisionetNetwork.ERROR_TO_SERVER_AF
+                    if self.nResponseStatusCode != HTTP_STATUS_OK {
+                        //错误处理
+                        var strErrorMsg = ERROR_TO_SERVER_AF
                         if let dicResponse = responseData as? [String: AnyObject] {
-                            strErrorMsg = (dicResponse["msg"] as? String) ?? VisionetNetwork.ERROR_TO_SERVER_AF
+                            strErrorMsg = (dicResponse["msg"] as? String) ?? ERROR_TO_SERVER_AF
                         }
-                        errorNetwork = NSError(domain: VisionetNetwork.VNetworkErrorDomain, code: VNetworkCode.HttpStatusError.rawValue, userInfo: [NSLocalizedDescriptionKey : strErrorMsg])
+                        errorNetwork = VNetworkError(code: .HttpStatusError, description: strErrorMsg)
                     }
-                    
                 } else {
-                    errorNetwork = NSError(domain: VisionetNetwork.VNetworkErrorDomain, code: VNetworkCode.ResponseNilError.rawValue, userInfo: [NSLocalizedDescriptionKey : VisionetNetwork.ERROR_TO_SERVER_AF])
+                    errorNetwork = VNetworkError(code: .ResponseNilError, description: ERROR_TO_SERVER_AF)
                 }
                 completionHandler(resultData, errorNetwork)
         }
         
-        //3.处理发生Session过期，禁用重定向操作
+        //3.禁用重定向操作（处理发生Session过期）
         let sessionDelegate = Alamofire.Manager.sharedInstance.delegate
         sessionDelegate.taskWillPerformHTTPRedirection = { session, task, response, request in
             if response.statusCode == 302 {

@@ -58,20 +58,20 @@ class TestSwiftViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        let struct1 = Struct1()
-        logSwift(struct1.str1)
-        logSwift(struct1.str1)
-        
-        
-        let ary: NSMutableArray = ["st1"]
-        //let ary1: [String] = ary
-        //        let ary1: [String] = ary as! [String]
-//        let ary1: [String] = ary as AnyObject as! [String]
-//        let ary1: [String] = ary as [AnyObject] as! [String]
-        let ary1: [String]? = ary as NSArray as? [String]
-        logSwift(ary1!)
-        
+//        
+//        let struct1 = Struct1()
+//        logSwift(struct1.str1)
+//        logSwift(struct1.str1)
+//        
+//        
+//        let ary: NSMutableArray = ["st1"]
+//        //let ary1: [String] = ary
+//        //        let ary1: [String] = ary as! [String]
+////        let ary1: [String] = ary as AnyObject as! [String]
+////        let ary1: [String] = ary as [AnyObject] as! [String]
+//        let ary1: [String]? = ary as NSArray as? [String]
+//        logSwift(ary1!)
+//        
 //        let stringNSArray: NSArray = ["10", "20","30","40","50"]
 //        var stringArray:[String] = stringNSArray as! [String]
 //        stringArray.append("60")
@@ -82,6 +82,17 @@ class TestSwiftViewController: UIViewController {
 //        var stringArray:[String] = stringNSArray as! [String]
 //        stringArray.append("60")
 //        print(stringNSArray,stringArray)
+        
+//        let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+//        
+//        func backwards(s1: String, s2: String) -> Bool {
+//            return s1 > s2
+//        }
+//        var reversed = names.sort(backwards)
+//        reversed = names.sort() { (s1: String, s2: String) in
+//            return s1 > s2
+//        }
+//        print(reversed)
     }
 
     override func didReceiveMemoryWarning() {
@@ -91,24 +102,34 @@ class TestSwiftViewController: UIViewController {
     
     @IBAction func loginAction(sender: AnyObject) {
         Common.showProgressView("登录中...", view: self.view, modal: false)
-        TestNetworkService.loginAction("sunyan", password: "123456") { (isSuccess, strErrorMessage, version) in
-            Common.hideProgressView(self.view)
-            if isSuccess {
-                if let version = version {
-                    print("version: " + version)
-                }
-            } else {
-                Common.tipAlert(strErrorMessage ?? "")
-            }
-        }
+        TestNetworkService.loginAction("sunyan", password: "123456", success: { data in
+                Common.hideProgressView(self.view)
+                Common.tipAlert("版本号：" + data)
+            },failure: { error in
+                Common.hideProgressView(self.view)
+                Common.tipAlert(error._domain)
+        })
     }
     
     @IBAction func getUserDetail(sender: AnyObject) {
-        TestNetworkService.getUserDetail("23")
+        Common.showProgressView("", view: self.view, modal: false)
+        TestNetworkService.getUserDetail("23", success: { data in
+                Common.hideProgressView(self.view)
+                let userInfo = "account:" + data.strLoginAccount + ", name:" + data.strUserName
+                Common.tipAlert(userInfo)
+            }, failure:{ error in
+                Common.hideProgressView(self.view)
+                Common.tipAlert(error.errorMessage)
+        })
     }
     
     @IBAction func logoutAction(sender: AnyObject) {
-        TestNetworkService.logoutAction()
+        Common.showProgressView("退出中...", view: self.view, modal: false)
+        TestNetworkService.logoutAction({
+                Common.hideProgressView(self.view)
+            }, failure: { error in
+                Common.hideProgressView(self.view)
+        })
     }
     
     @IBAction func uploadAction(sender: AnyObject) {
@@ -117,7 +138,14 @@ class TestSwiftViewController: UIViewController {
         aryFile.append(NSBundle.mainBundle().pathForResource("app_preview", ofType:"png") ?? "")
         aryFile.append(NSBundle.mainBundle().pathForResource("caf_preview", ofType:"png") ?? "")
         
-        TestNetworkService.uploadAction(aryFile)
+        Common.showProgressView("上传中...", view: self.view, modal: false)
+        TestNetworkService.uploadAction(aryFile, success: { data in
+                Common.hideProgressView(self.view)
+                print("\(data)")
+            }, failure: { error in
+                Common.hideProgressView(self.view)
+                Common.tipAlert(error.errorMessage)
+        })
     }
 
 }
