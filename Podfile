@@ -4,7 +4,7 @@ use_frameworks!
 
 target "AFNetworkingDemo" do
 
-pod 'Alamofire', '~> 3.4'
+pod 'Alamofire', '~> 3.4' 
 pod 'SwiftyJSON'
 
 pod 'AFNetworking', '~> 3.0'
