@@ -9,12 +9,12 @@
 import UIKit
 
 //UIColor初始化函数
-func COLOR_SWIFT(r:CGFloat,_ g:CGFloat,_ b:CGFloat,_ a:CGFloat) -> UIColor{
+func COLOR_SWIFT(_ r:CGFloat,_ g:CGFloat,_ b:CGFloat,_ a:CGFloat) -> UIColor{
     return UIColor(red: r/255, green: g/255, blue: b/255, alpha: a)
 }
 
 //Swift Log方法
-func logSwift<T>(message: T,
+func logSwift<T>(_ message: T,
               file: String = #file,
               method: String = #function,
               line: Int = #line)

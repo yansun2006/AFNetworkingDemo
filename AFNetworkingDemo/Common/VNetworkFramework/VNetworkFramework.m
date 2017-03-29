@@ -97,7 +97,7 @@ static NSString *loginURL = nil;
 
 -(void)sendPostToServerCommonMethod:(NSString*)strRequestMethod parameter:(id)objParameter sessionId:(NSString*)strSessionID result:(NetworkResult)networkResult
 {
-    //1.init server url
+    //1.init server url//stringByAddingPercentEncodingWithAllowedCharacters
     NSString *serverURL = [strConnectionURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     if (strSessionID != nil)
     {

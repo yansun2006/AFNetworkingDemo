@@ -8,20 +8,21 @@
 
 import UIKit
 import SwiftyJSON
+import HandyJSON
 
 //测试VisionetNetwork类
 class TestNetworkService: NSObject {
     
     //登录操作
-    static func loginAction(name: String, password: String, success: (String) -> Void, failure:FailureBlock) {
-        var dicBody = Dictionary<String,AnyObject>()
+    static func loginAction(_ name: String, password: String, success: @escaping (String) -> Void, failure: @escaping FailureBlock) {
+        var dicBody = Dictionary<String,Any>()
         dicBody["username"] = name
         dicBody["password"] = password
         dicBody["client_flag"] = "ios"
         dicBody["model"] = "iOS Simulator,iPhone OS:9.3"
         
-        let network = VisionetNetwork(strURL: "http://vn-functional.chinacloudapp.cn/findest/mobilelogin")
-        network.login(dicBody) { (data: AnyObject, error: VNetworkError?) in
+        let network = VisionetNetwork(urlString: "http://vn-functional.chinacloudapp.cn:10080/findest/mobilelogin")
+        network.login(dicBody) { (data: Data, error: VNetworkError?) in
             if let error = error {
                 failure(error)
             } else {
@@ -33,42 +34,27 @@ class TestNetworkService: NSObject {
     }
     
     //获取用户详情接口
-    static func getUserDetail(strID: String, success: (UserVo) -> Void, failure:FailureBlock) {
-        let strURL = "http://vn-functional.chinacloudapp.cn/findest/mobile/webUser/userDetail/" + strID
+    static func getUserDetail(_ strID: String, success: @escaping (UserVo) -> Void, failure: @escaping FailureBlock) {
+        let urlString = "http://vn-functional.chinacloudapp.cn:10080/findest/mobile/webUser/userDetail/" + strID
         
-        let network = VisionetNetwork(strURL: strURL)
-        network.request(.GET) { (data, error) in
+        let network = VisionetNetwork(urlString: urlString)
+        network.request(.get) { (data, error) in
             if let error = error {
                 failure(error)
             } else {
-                let json = JSON(data)
-                
-                let userVo = UserVo()
-                userVo.strUserID = json["id"].stringValue
-                userVo.strLoginAccount = json["loginName"].stringValue
-                userVo.strSignature = json["signature"].stringValue
-                userVo.strQQ = json["qq"].stringValue
-                userVo.strPhoneNumber = json["phoneNumber"].stringValue
-                
-                userVo.gender = json["gender"].intValue
-                userVo.strBirthday = json["birthdayFormat"].stringValue
-                userVo.strUserName = json["aliasName"].stringValue
-                userVo.strRealName = json["trueName"].stringValue
-                userVo.strPosition = json["title"].stringValue
-                
-                userVo.strEmail = json["email"].stringValue
-                userVo.strAddress = json["address"].stringValue
-                userVo.strFirstLetter = json["firstLetter"].stringValue
-                
-                success(userVo)
+                if let userVo = JSONDeserializer<UserVo>.deserializeFrom(json: String(data: data, encoding: .utf8)) {
+                    success(userVo)
+                } else {
+                    failure(VNetworkError(description: ERROR_TO_RESPONSE_DATA))
+                }
             }
         }
     }
     
     //登出操作
-    static func logoutAction(success: (Void) -> Void, failure:FailureBlock) {
-        let network = VisionetNetwork(strURL: "http://vn-functional.chinacloudapp.cn/findest/mobilelogout")
-        network.request(.GET) { (data, error) in
+    static func logoutAction(success: @escaping (Void) -> Void, failure: @escaping FailureBlock) {
+        let network = VisionetNetwork(urlString: "http://vn-functional.chinacloudapp.cn:10080/findest/mobilelogout")
+        network.request(.get) { (data, error) in
             if let error = error {
                 failure(error)
             } else {
@@ -78,14 +64,17 @@ class TestNetworkService: NSObject {
     }
     
     //文件上传
-    static func uploadAction(aryFile: [String],success: (String) -> Void, failure:FailureBlock) {
-        let network = VisionetNetwork(strURL: "http://vn-functional.chinacloudapp.cn/findest/upload")
-        network.uploadFileList(aryFile) { (data, error) in
+    static func uploadAction(_ aryFilePath: [String],success: @escaping ([Any]) -> Void, failure: @escaping FailureBlock) {
+        let network = VisionetNetwork(urlString: "http://vn-functional.chinacloudapp.cn:10080/findest/upload")
+        network.uploadFileList(aryFilePath) { (resultList, error) in
             if let error = error {
                 failure(error)
             } else {
-                print("data:\(data)")
-                success("data:\(data)")
+                if resultList.count > 0 {
+                    success(resultList)
+                } else {
+                    failure(VNetworkError(description: ERROR_TO_RESPONSE_DATA))
+                }
             }
         }
     }
