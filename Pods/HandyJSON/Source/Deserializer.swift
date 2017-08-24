@@ -48,30 +48,37 @@ extension _PropertiesMappable {
 
         let mutablePointer = rawPointer.advanced(by: property.offset)
 
+        InternalLogger.logVerbose(key, "address at: ", mutablePointer.hashValue)
         if mapper.propertyExcluded(key: mutablePointer.hashValue) {
-            ClosureExecutor.executeWhenDebug {
-                print("Exclude property: \(key)")
-            }
+            InternalLogger.logDebug("Exclude property: \(key)")
             return
         }
 
+        var maybeValue: Any? = nil
+
         if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
-            // if specific key is set, replace the label
-            if let specifyKey = mappingHandler.mappingName {
-                key = specifyKey
+            if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
+                for mappingName in mappingNames {
+                    if let _value = dict[mappingName] {
+                        maybeValue = _value
+                        break
+                    }
+                }
+            } else {
+                maybeValue = dict[key]
             }
 
             if let transformer = mappingHandler.assignmentClosure {
                 // execute the transform closure
-                transformer(dict[key])
+                transformer(maybeValue)
                 return
             }
+        } else {
+            maybeValue = dict[key]
         }
 
-        guard let rawValue = dict[key] as? NSObject else {
-            ClosureExecutor.executeWhenDebug {
-                print("Can not find a value from dictionary for property: \(key)")
-            }
+        guard let rawValue = maybeValue as? NSObject else {
+            InternalLogger.logDebug("Can not find a value from dictionary for property: \(key)")
             return
         }
 
@@ -86,18 +93,14 @@ extension _PropertiesMappable {
                 return
             }
         }
-        ClosureExecutor.executeWhenDebug {
-            print("Property: \(property.key) hasn't been written in")
-        }
+        InternalLogger.logDebug("Property: \(property.key) hasn't been written in")
     }
 
     static func _transform(dict: NSDictionary, toType: _PropertiesMappable.Type) -> _PropertiesMappable? {
         var instance = toType.init()
 
         guard let properties = getProperties(forType: toType) else {
-            ClosureExecutor.executeWhenError {
-                print("Failed when try to get properties from type: \(type(of: toType))")
-            }
+            InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: toType))")
             return nil
         }
 
@@ -111,6 +114,8 @@ extension _PropertiesMappable {
         } else {
             rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
         }
+
+        InternalLogger.logVerbose("instance start at: ", rawPointer.hashValue)
 
         var _dict = dict
         if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
@@ -127,6 +132,7 @@ extension _PropertiesMappable {
 
         properties.forEach { (property) in
             _transform(rawPointer: rawPointer, property: property, dict: _dict, mapper: mapper)
+            InternalLogger.logVerbose("field: ", property.key, "  offset: ", property.offset)
         }
 
         return instance
@@ -154,6 +160,11 @@ public extension Array where Element: HandyJSON {
     /// this method converts it to a Models array
     public static func deserialize(from json: String?, designatedPath: String? = nil) -> [Element?]? {
         return JSONDeserializer<Element>.deserializeModelArrayFrom(json: json, designatedPath: designatedPath)
+    }
+
+    /// deserialize model array from NSArray
+    public static func deserialize(from array: NSArray?) -> [Element?]? {
+        return JSONDeserializer<Element>.deserializeModelArrayFrom(array: array)
     }
 }
 
@@ -184,14 +195,12 @@ public class JSONDeserializer<T: HandyJSON> {
                 return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
         } catch let error {
-            ClosureExecutor.executeWhenError {
-                print(error)
-            }
+            InternalLogger.logError(error)
         }
         return nil
     }
 
-    /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// if the JSON field found by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
     /// this method converts it to a Models array
     public static func deserializeModelArrayFrom(json: String?, designatedPath: String? = nil) -> [T?]? {
         guard let _json = json else {
@@ -200,15 +209,24 @@ public class JSONDeserializer<T: HandyJSON> {
         do {
             let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonArray = getSubObject(inside: jsonObject as? NSObject, by: designatedPath) as? NSArray {
-                return jsonArray.map({ (jsonDict) -> T? in
-                    return self.deserializeFrom(dict: jsonDict as? NSDictionary)
+                return jsonArray.map({ (item) -> T? in
+                    return self.deserializeFrom(dict: item as? NSDictionary)
                 })
             }
         } catch let error {
-            ClosureExecutor.executeWhenError {
-                print(error)
-            }
+            InternalLogger.logError(error)
         }
         return nil
+    }
+
+    /// if the object found by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// this method converts it to a Models array
+    public static func deserializeModelArrayFrom(array: NSArray?) -> [T?]? {
+        guard let _arr = array else {
+            return nil
+        }
+        return _arr.map({ (item) -> T? in
+            return self.deserializeFrom(dict: item as? NSDictionary)
+        })
     }
 }
